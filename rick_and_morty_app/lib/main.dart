@@ -14,53 +14,124 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
   final String title;
+  bool isAnimationEnded;
+  MyHomePage({
+    super.key,
+    this.isAnimationEnded = false,
+    required this.title,
+  });
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
+  bool isAnimationEnded = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+      body: Stack(
+        children: [
+          AnimatedPositioned(
+            onEnd: () {
+              setState(() {
+                isAnimationEnded = !isAnimationEnded;
+              });
+            },
+            left: isAnimationEnded ? 0 : -1040,
+            duration: const Duration(seconds: 15),
+            curve: Curves.easeInOut,
+            child: GestureDetector(
+              onDoubleTap: () {
+                setState(() {
+                  isAnimationEnded = !isAnimationEnded;
+                });
+              },
+              child: Image.asset(
+                'lib/assets/images/bgHome.jpg',
+                height: MediaQuery.of(context).size.height,
+                fit: BoxFit.cover,
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+          ),
+          Positioned(
+            top: 0,
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment(0, 0),
+                  end: Alignment(0, 0.8),
+                  colors: <Color>[
+                    Color.fromARGB(123, 0, 0, 0),
+                    Color.fromRGBO(0, 0, 0, 0),
+                  ],
+                ),
+              ),
+              width: MediaQuery.of(context).size.width,
+              height: 200,
             ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+          ),
+          Positioned(
+            bottom: 0,
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment(0, 0),
+                  end: Alignment(0, 0.8),
+                  colors: <Color>[
+                    Color.fromRGBO(0, 0, 0, 0),
+                    Color.fromARGB(123, 0, 0, 0),
+                  ],
+                ),
+              ),
+              width: MediaQuery.of(context).size.width,
+              height: 200,
+            ),
+          ),
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.05,
+            left: MediaQuery.of(context).size.width * 0.05,
+            child: Column(
+              children: const [
+                Text(
+                  'Rick and Morty App',
+                  style: TextStyle(color: Colors.white),
+                ),
+                Text(
+                  'by Guilherme Carneiro',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            height: 60,
+            width: MediaQuery.of(context).size.width * 0.9,
+            bottom: MediaQuery.of(context).size.height * 0.05,
+            left: MediaQuery.of(context).size.width * 0.05,
+            child: ElevatedButton(
+              onPressed: () {},
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all<Color>(
+                    const Color.fromARGB(218, 20, 182, 115)),
+              ),
+              child: const Text(
+                'Start Now',
+                style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontSize: 28,
+                ),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
