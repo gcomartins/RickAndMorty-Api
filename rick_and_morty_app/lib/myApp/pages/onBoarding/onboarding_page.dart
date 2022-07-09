@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rick_and_morty_app/myApp/pages/Home/home_controller.dart';
+import 'package:rick_and_morty_app/myApp/pages/Home/home_page.dart';
 import 'package:rick_and_morty_app/myApp/pages/onBoarding/onboarding_controller.dart';
 
 class OnBoardingPage extends StatefulWidget {
@@ -23,11 +25,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
         children: [
           AnimatedPositioned(
             left: widget.controller.leftPosition,
-            onEnd: () {
-              setState(() {
-                widget.controller.continueAnimation();
-              });
-            },
+            onEnd: () => setState(() => widget.controller.continueAnimation()),
             duration: Duration(seconds: widget.controller.animationDuration),
             curve: Curves.easeInOut,
             child: Image.asset(
@@ -92,7 +90,13 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       bottom: MediaQuery.of(context).size.height * 0.05,
       left: MediaQuery.of(context).size.width * 0.05,
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: ((context) => HomePage()),
+              ));
+        },
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(
               const Color.fromARGB(218, 20, 182, 115)),
